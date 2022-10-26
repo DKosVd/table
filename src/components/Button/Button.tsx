@@ -6,6 +6,12 @@ const ButtonStyle = styled.button`
     padding: 10px;
 `;
 
-export const Button = () => {
-    return <ButtonStyle>X</ButtonStyle>
+
+type ButtonProps = {
+    text: string;
+    handler: (e: any) => void;
+}
+
+export const Button: React.FC<ButtonProps> = ({text, handler}) => {
+    return <ButtonStyle onClick={handler}>{text}</ButtonStyle>
 }

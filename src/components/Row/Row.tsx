@@ -1,11 +1,11 @@
-import { useId, useState } from "react";
+import React, { useEffect, useId, useState } from "react";
 import styled from "styled-components";
-import { Company, Employee } from "../../types"
 
 
 type RowProps<T> = {
     value: T;
-    handler?: (e: any) => void;
+    handlerPick: (id: number) => void;
+    clearActive?: boolean;
 }
 
 const Td = styled.td`
@@ -16,19 +16,19 @@ const Td = styled.td`
 const Tr = styled.tr`
 `
 
-export const Row = <T extends object>( {value, handler}: RowProps<T> ) => {
-    const [active, setActive] = useState<boolean>(false);
-
-    const handleSetActive = () => {
-        setActive(!active);
+const Row = <T extends object & {id: number, name: string}>( {value, handlerPick, clearActive = false}: RowProps<T> ) => {
+    console.log('render row')
+    const handleSetActive = (e: React.SyntheticEvent) => {
+        handlerPick(value.id)
     }
     return (
-        <Tr onClick={handler} style={ active ? {background: 'gray'} : {}}>
+        <Tr style={ clearActive ? {background: 'gray'} : {}}>
             <Td>
-                <input onChange={handleSetActive} type={'checkbox'}/>
+                <input onChange={handleSetActive} type={'checkbox'} checked={clearActive}/>
             </Td>
-            {Object.values(value).map( (el, idx) => <Td key={el.name + idx.toString()}>{el}</Td>)}
-            <Td></Td>
+            {Object.values(value).map( (el, idx) => <Td key={value.name + idx.toString()}>{el}</Td>)}
         </Tr>
     )
 }
+
+export default React.memo(Row)
