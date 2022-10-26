@@ -1,16 +1,24 @@
+import styled from "styled-components"
+import { Row } from "../Row/Row";
 
 
 
-type TableProps =  {
-    children: React.ReactNode
+type TableProps<T> =  {
+    children: React.ReactNode,
+    dataItem: Array<T>,
 }
 
-export const Table: React.FC<TableProps> = ({children}) => {
+const TableStyle = styled.table`
+    padding: 10px;
+    border-collapse: collapse;
+`;
+
+export const Table =<T extends object & {id: number}>({dataItem}: TableProps<T>) => {
     return (
-    <table>
+    <TableStyle>
         <tbody>
-            {children}
+            {dataItem.map( (data: T, id) => <Row key={data.id + id} value={data}/>)}
         </tbody>
-    </table>
+    </TableStyle>
     )
 }

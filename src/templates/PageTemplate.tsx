@@ -1,5 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
+import { Header } from '../components/Header/Header';
 
 
 const Container = styled.div`
@@ -17,6 +18,7 @@ type PageTemplateProps = {
 export const PageTemplate: React.FC<PageTemplateProps> = ({children}) => {
     return (
         <>
+            <Header/>
             <Container>{children}</Container>
         </>
     )
