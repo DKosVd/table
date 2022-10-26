@@ -12,16 +12,30 @@ const WrapperForTable = styled.div`
     gap: 50px;
 `;
 
-export const WrapperWithTable = () => {
-    const [companies, setCompanies] = useState<Company[]>(companiesData);
+const TableEmployees = () => {
     const [employees, setEmployees] = useState<Employee[]>(employeesData);
+    const idActiveCompany = null;
+    if(idActiveCompany) {
+        return <Table dataItem={employees.filter(employee => employee.companyId === idActiveCompany)}/>
+    }
+    return <p>Выберите компанию</p>;
+}
 
+const TableCompanies = () => {
+    const [companies, setCompanies] = useState<Company[]>(companiesData);
+
+    const handlerDelete = (event: Event) => {
+        console.log(event)
+    }
+
+    return   <Table handler={handlerDelete} dataItem={companies}/>;
+}
+
+export const WrapperWithTable = () => {
     return (
         <WrapperForTable>
-            <Table dataItem={companies}>
-            </Table>
-            <Table dataItem={employees}>
-            </Table>
+            <TableCompanies/>
+            <TableEmployees/>
         </WrapperForTable>
     )
 }

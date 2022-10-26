@@ -8,5 +8,19 @@ export const employeesData: Employee[] = [
         surname: 'Surname',
         position: 'Position',
         companyId: 15
+    },
+    {
+        id: 2,
+        name: 'Name',
+        surname: 'Surname',
+        position: 'Position',
+        companyId: 15
+    },
+    {
+        id: 2,
+        name: 'Name',
+        surname: 'Surname',
+        position: 'Position',
+        companyId: 10
     }
 ]
