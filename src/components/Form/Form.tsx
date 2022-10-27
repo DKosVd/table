@@ -36,7 +36,7 @@ const FormContext = createContext({} as ContextProps)
 
 export const Form: React.FC<FormProps> = ({children, buttonTitle = 'Применить', initialState, apply}) => {
     const [form, setForm] = useState<stateForm>(initialState);
-    console.log(form)
+    // console.log(form)
     const handleChangeForm = useCallback( (e: React.FormEvent<HTMLInputElement>) => {
         const {id, value} = e.currentTarget;
         setForm((prev) => ({
@@ -67,7 +67,7 @@ export const Form: React.FC<FormProps> = ({children, buttonTitle = 'Примен
 
 export const FormInput: React.FC<FormInputProps> = ({type, label, id, placeholder, isReadonly, isRequired}) => {
     const {form, handleChangeForm} = useContext(FormContext);
-    console.log(form)
+    // console.log(form)
     return (
         <div>
             <label htmlFor={id}>{label}</label>

@@ -1,10 +1,10 @@
-import { Company } from "../types";
+import { Company, Employee } from "../types";
 
 
-function prepareSelectedCompanies(companies: Company[]) {
+function selectedAllElements(selects: Company[] | Employee[]) {
     const obj: {[k: string]: boolean} = {};
-    companies.forEach(company => obj[company.id] = false )
+    selects.forEach(select => obj[select.id] = true )
     return obj;
 }
 
-export default prepareSelectedCompanies;
+export default selectedAllElements;

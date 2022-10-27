@@ -1,12 +1,15 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
+import { deleteCompaniesAction, deleteEmployeesAction, setCompaniesAction, setSelectedCompaniesAction } from '../../../app-state/Company/company';
+import { selectCompaniesItems, selectCurrentCompany, selectSelectedCompanies } from '../../../app-state/Company/selector';
+import { deleteEmployeeAction, setEmployeesByCompanyIdAction, setSelectedEmployeesAction } from '../../../app-state/Employees/employees';
+import { selectEmployesByIdCompany, selectSelectedEmployees } from '../../../app-state/Employees/selector';
+import { useAppDispatch } from '../../../app-state/hooks';
 import { Form, FormInput } from '../../../components/Form/Form';
-import  Row  from '../../../components/Row/Row';
 import { Table } from '../../../components/Table/Table';
 import { companiesData } from '../../../mock/companies';
-import { employeesData } from '../../../mock/employees';
-import { Company, Employee } from '../../../types';
-import prepareSelectedCompanies from '../../../utils/prepareSelectedCompanies';
+import selectedAllElements from '../../../utils/prepareSelectedCompanies';
 
 
 const WrapperForTable = styled.div`
@@ -16,56 +19,75 @@ const WrapperForTable = styled.div`
 
 
 const TableEmployees = () => {
-    console.log('render table e')
-    const [employees, setEmployees] = useState<Employee[]>(employeesData);
-    const idActiveCompany = 15;
-    
+    const dispatch = useAppDispatch();
+    const idCompany = useSelector(selectCurrentCompany);
+    const employees = useSelector(selectEmployesByIdCompany);
+    const selectedEmployees = useSelector(selectSelectedEmployees)
+
+    useEffect( () => {
+        if(idCompany) {
+            const id = +idCompany[0];
+            dispatch(setEmployeesByCompanyIdAction(id))
+        }
+    }, [dispatch, idCompany])
+
     const handlerDelete = (event: MouseEvent) => {
-        console.log('TableEmployees delete')
+        if(idCompany) {
+            dispatch(deleteEmployeesAction({
+                items: selectedEmployees,
+                id: +idCompany[0]
+            }))
+            dispatch(deleteEmployeeAction(selectedEmployees))
+        }
     }
 
     const handlerAdd = (event: MouseEvent) => {
-        console.log('TableEmployees add')
+        
     }
 
-    const handlerPick = (idx: number) => {
-        console.log(idx)
+    const handlerPick = useCallback((idx: number) => {
+        dispatch(setSelectedEmployeesAction(idx))
+    }, [])
+
+    const handlerPickAll = () => {
+        dispatch(setSelectedEmployeesAction(selectedAllElements(employees)))
     }
 
 
-    if(idActiveCompany) {
-        // return <Table handlerPick={handlerPick} handlerPickAll={() => {}} handlerAdd={handlerAdd} handlerDelete={handlerDelete} dataItem={employees.filter(employee => employee.companyId === idActiveCompany)}/>
+    if(idCompany) {
+        return <Table handlerPick={handlerPick} selectedItems={selectedEmployees} handlerPickAll={handlerPickAll} handlerAdd={handlerAdd} handlerDelete={handlerDelete} dataItem={employees}/>
     }
+    
     return <p>Выберите компанию</p>;
 }
 
 const TableCompanies = () => {
-    console.log('render table c')
-    const [companies, setCompanies] = useState<Company[]>(companiesData);
-    const [selectedCompanies, setSelectedCompanies] = useState<{[k: number] : boolean}>(prepareSelectedCompanies(companies));
 
-    
-    const handlerDelete = (event: Event) => {
-        setCompanies(companies.filter(company => !selectedCompanies[company.id]))
+    const dispatch = useAppDispatch();
+    const companies = useSelector(selectCompaniesItems);
+    const selectedCompanies = useSelector(selectSelectedCompanies);
+
+    useEffect( () => {
+        dispatch(setCompaniesAction(companiesData))
+    }, [dispatch])
+
+
+    const handlerDelete = () => {
+        dispatch(deleteCompaniesAction(selectedCompanies))
     }
+
 
     const handlerAdd = (event: Event) => {
         console.log('TableCompanies add')
     }
 
     const handlerPick = useCallback((idx: number) => {
-        setSelectedCompanies((prevState) => ({
-            ...prevState,
-            [idx]: !prevState[idx]
-        }) );
+        dispatch(setSelectedCompaniesAction(idx))
     }, [])
 
     const handlerPickAll = () => {
-        const tmpObj: {[k: number] : boolean} = {};
-        for(let selected in selectedCompanies) {
-            tmpObj[selected] = !selectedCompanies[selected]
-        }
-        setSelectedCompanies(tmpObj)
+        console.log(selectedCompanies)
+        dispatch(setSelectedCompaniesAction(selectedAllElements(companies)))
     }
 
     if(companies.length === 0) {
@@ -80,7 +102,6 @@ const TableCompanies = () => {
 }
 
 const FormCompanies = () => {
-    console.log('render form c')
     const apply = (data: any) => {
         console.log(data)
     }
@@ -101,7 +122,6 @@ const FormCompanies = () => {
 
 
 const FormEmployees = () => {
-    console.log('render form e')
     const apply = (data: any) => {
         console.log(data)
     }

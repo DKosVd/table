@@ -12,3 +12,7 @@ export type Employee = {
     position: string;
     companyId: number;
 }
+
+export type ChoosenItems = {
+    [k: number]: boolean;
+} 
