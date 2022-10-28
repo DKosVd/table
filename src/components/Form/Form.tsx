@@ -1,6 +1,6 @@
 import React, { createContext, useCallback, useContext, useState } from 'react';
 
-type stateForm = {
+export type stateForm = {
     id: number;
     name: string;
     countEmployee?: number;

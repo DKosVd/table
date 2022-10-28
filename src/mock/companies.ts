@@ -10,7 +10,7 @@ export const companiesData:Company[] = [
     {
         id: 15,
         name: 'Name',
-        countEmployee: 10,
+        countEmployee: 20,
         address: 'Address'
     },
 ];

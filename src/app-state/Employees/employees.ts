@@ -9,13 +9,15 @@ import { ChoosenItems, Employee } from "../../types";
 export type EmployeesState = {
     items: Employee[],
     itemsById: Employee[],
-    selectedEmployees: ChoosenItems
+    selectedEmployees: ChoosenItems,
+    status: string
 }
 
 const initialState:EmployeesState = {
     items: employeesData,
     itemsById: [],
-    selectedEmployees: {}
+    selectedEmployees: {},
+    status: ""
 }
 
 
@@ -25,7 +27,13 @@ const setEmployeesByCompanyId: CaseReducer<EmployeesState, PayloadAction<number>
 
 
 const deleteEmployees:CaseReducer<EmployeesState, PayloadAction<ChoosenItems>> = (state, action) => {
-    state.items = state.items.filter(employe => !action.payload[employe.id])
+    state.items = state.items.filter(employe => {
+        if(action.payload[employe.id]) {
+            delete state.selectedEmployees[employe.id]
+            return false;
+        }
+        return true
+    })
 }
 
 const setSelectedEmployees: CaseReducer<EmployeesState, PayloadAction<ChoosenItems | number>> = (state, action) => {
@@ -36,6 +44,44 @@ const setSelectedEmployees: CaseReducer<EmployeesState, PayloadAction<ChoosenIte
     }
 }
 
+const setStatus: CaseReducer<EmployeesState, PayloadAction<string>> = (state, action) => {
+    state.status = action.payload;
+}
+
+const addEmployee: CaseReducer<EmployeesState, PayloadAction<Employee>> = (state, action) => {
+    const id = +new Date();
+    state.items.push({
+        ...action.payload,
+        id
+    })
+    state.itemsById.push({
+        ...action.payload,
+        id
+    })
+}
+
+const editEmployee:CaseReducer<EmployeesState, PayloadAction<Employee>> = (state, action) => {
+    state.items = state.items.map(item => {
+        console.log(action.payload)
+        if(item.id === action.payload.id) {
+            return {
+                ...action.payload
+            }
+        }
+        return item
+    })
+
+    state.itemsById = state.itemsById.map(item => {
+        console.log(action.payload)
+        if(item.id === action.payload.id) {
+            return {
+                ...action.payload
+            }
+        }
+        return item
+    })
+}
+
 
 const EmployeesSlice = createSlice({
     name: 'employees',
@@ -43,12 +89,15 @@ const EmployeesSlice = createSlice({
     reducers: {
         setSelectedEmployeesAction: setSelectedEmployees,
         deleteEmployeeAction: deleteEmployees,
-        setEmployeesByCompanyIdAction: setEmployeesByCompanyId
+        setEmployeesByCompanyIdAction: setEmployeesByCompanyId,
+        setStatusEmployeeAction: setStatus,
+        addEmployeeAction: addEmployee,
+        editEmployeeAction: editEmployee
     },
 })
 
 export const { actions, reducer } = EmployeesSlice;
 
-export const { setSelectedEmployeesAction, deleteEmployeeAction, setEmployeesByCompanyIdAction } = actions;
+export const { editEmployeeAction, addEmployeeAction, setStatusEmployeeAction, setSelectedEmployeesAction, deleteEmployeeAction, setEmployeesByCompanyIdAction } = actions;
 
 export default EmployeesSlice;
