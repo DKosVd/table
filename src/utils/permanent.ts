@@ -1,0 +1,1 @@
+export const COUNTELEM = 10;

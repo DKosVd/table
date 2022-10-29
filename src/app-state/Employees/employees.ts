@@ -1,28 +1,31 @@
-import { createSlice, CaseReducer, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, CaseReducer, PayloadAction } from "@reduxjs/toolkit";
 import { employeesData } from "../../mock/employees";
 import { ChoosenItems, Employee } from "../../types";
+import { COUNTELEM } from "../../utils/permanent";
 
-// Todo: After delete company, delete all employees
-// Add adding ))00)0
-// Build counter employees
-// Scrolling 
+
 export type EmployeesState = {
     items: Employee[],
     itemsById: Employee[],
     selectedEmployees: ChoosenItems,
-    status: string
+    status: string,
+    page: number
 }
 
 const initialState:EmployeesState = {
     items: employeesData,
     itemsById: [],
     selectedEmployees: {},
-    status: ""
+    status: "",
+    page: 0
 }
 
 
 const setEmployeesByCompanyId: CaseReducer<EmployeesState, PayloadAction<number>> = (state, action) => {
-    state.itemsById = state.items.filter(employe => employe.companyId === action.payload)
+    const itemsById = state.items.filter(employe => employe.companyId === action.payload);
+    const offset = state.page * COUNTELEM;
+    state.page++;
+    state.itemsById = itemsById.slice(0, offset + COUNTELEM)
 }
 
 
@@ -82,6 +85,10 @@ const editEmployee:CaseReducer<EmployeesState, PayloadAction<Employee>> = (state
     })
 }
 
+const resetPage: CaseReducer<EmployeesState, PayloadAction> = (state, action) =>{
+    state.page = 0;
+}
+
 
 const EmployeesSlice = createSlice({
     name: 'employees',
@@ -92,12 +99,13 @@ const EmployeesSlice = createSlice({
         setEmployeesByCompanyIdAction: setEmployeesByCompanyId,
         setStatusEmployeeAction: setStatus,
         addEmployeeAction: addEmployee,
-        editEmployeeAction: editEmployee
+        editEmployeeAction: editEmployee,
+        resetPageAction: resetPage
     },
 })
 
 export const { actions, reducer } = EmployeesSlice;
 
-export const { editEmployeeAction, addEmployeeAction, setStatusEmployeeAction, setSelectedEmployeesAction, deleteEmployeeAction, setEmployeesByCompanyIdAction } = actions;
+export const { resetPageAction, editEmployeeAction, addEmployeeAction, setStatusEmployeeAction, setSelectedEmployeesAction, deleteEmployeeAction, setEmployeesByCompanyIdAction } = actions;
 
 export default EmployeesSlice;

@@ -14,11 +14,15 @@ type PageTemplateProps = {
     children: React.ReactNode;
 }
 
+const Spacing = styled.div`
+    margin: 20px 0px;
+`
 
 export const PageTemplate: React.FC<PageTemplateProps> = ({children}) => {
     return (
         <>
             <Header/>
+            <Spacing/>
             <Container>{children}</Container>
         </>
     )

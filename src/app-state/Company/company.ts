@@ -1,15 +1,20 @@
 import { createSlice, CaseReducer, PayloadAction } from "@reduxjs/toolkit";
+import { companiesData } from "../../mock/companies";
 import { ChoosenItems, Company } from "../../types";
+import { COUNTELEM } from "../../utils/permanent";
 
 
 export type CompanyState = {
     items: Company[],
     selectedCompanies: ChoosenItems,
-    status: string
+    status: string,
+    page: 0
 }
 
-const setCompanies: CaseReducer<CompanyState, PayloadAction<Company[]>> = (state, action) => {
-    state.items = action.payload;
+const setCompanies: CaseReducer<CompanyState, PayloadAction> = (state, action) => {
+    const offset = COUNTELEM * state.page;
+    state.page++;
+    state.items.push(...companiesData.slice(offset, offset + COUNTELEM));
 }
 
 const deleteEmployees: CaseReducer<CompanyState, PayloadAction<{items: ChoosenItems, id: number}>> = (state, action) => {
@@ -81,7 +86,8 @@ const editCompany: CaseReducer<CompanyState, PayloadAction<Company>> = (state, a
 const initialState: CompanyState = {
     items: [],
     selectedCompanies: {},
-    status: ""
+    status: "",
+    page: 0
 }
 
 const companySlice = createSlice({

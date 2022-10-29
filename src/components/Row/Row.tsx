@@ -1,4 +1,4 @@
-import React, { useEffect, useId, useState } from "react";
+import React from "react";
 import styled from "styled-components";
 
 
@@ -10,7 +10,9 @@ type RowProps<T> = {
 
 const Td = styled.td`
     padding: 10px;
-    border: 1px solid black;
+    border: 1px solid gray;
+    border-right: 0px;
+    border-left: 0px;
 `;
 
 const Tr = styled.tr`

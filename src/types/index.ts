@@ -16,3 +16,8 @@ export type Employee = {
 export type ChoosenItems = {
     [k: number]: boolean;
 } 
+
+
+export type Pagination = {
+    page: number;
+}

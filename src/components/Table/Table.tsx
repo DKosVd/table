@@ -17,13 +17,16 @@ type TableProps<T> =  {
 const ButtonsContainer = styled.div`
     display: flex;
     gap: 10px;
-    justify-content: right;
+    justify-content: start;
 `
 
 const TableContainer = styled.div`
     display: flex;
     flex-direction: column;
     gap: 10px;
+    max-width: 340px;
+    min-width: 340px;
+    padding: 10px;
 `
 
 const TableStyle = styled.table`
@@ -38,7 +41,7 @@ export const Table =<T extends object & {id: number, name: string}>({dataItem, s
         <ButtonsContainer>
             <Button handler={handlerPickAll} text={"Выделить все"}/>
             <Button handler={handlerAdd} text={"Добавить"} />
-            <Button handler={handlerDelete} text={"Х"}/>
+            <Button handler={handlerDelete} text={"Удалить"}/>
         </ButtonsContainer>
         <TableStyle>
             <tbody>

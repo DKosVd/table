@@ -1,4 +1,6 @@
 import React, { createContext, useCallback, useContext, useState } from 'react';
+import styled from 'styled-components';
+import { Button } from '../Button/Button';
 
 export type stateForm = {
     id: number;
@@ -32,6 +34,28 @@ type FormInputProps = {
     isReadonly: boolean;
 }
 
+const InputContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+`
+
+const InputStyle = styled.input`
+    height: 25px;
+    border-radius: 5px;
+    border: 1px solid black;
+`
+
+const LabelStyle = styled.label`
+    margin: 5px 0px 0px 0px;
+`
+
+const ButtonMargin = styled.div`
+    margin: 10px 0px;
+`
+
+
+
 const FormContext = createContext({} as ContextProps)
 
 export const Form: React.FC<FormProps> = ({children, buttonTitle = 'Применить', initialState, apply}) => {
@@ -58,20 +82,23 @@ export const Form: React.FC<FormProps> = ({children, buttonTitle = 'Примен
             }}>
                 {children}
             </FormContext.Provider>
-            <button type='button' onClick={handleApply}>{buttonTitle}</button>
+            <ButtonMargin>
+                <Button  handler={handleApply} text={buttonTitle}/>
+            </ButtonMargin>
         </form>
      
     );
 }
 
 
+
 export const FormInput: React.FC<FormInputProps> = ({type, label, id, placeholder, isReadonly, isRequired}) => {
     const {form, handleChangeForm} = useContext(FormContext);
     // console.log(form)
     return (
-        <div>
-            <label htmlFor={id}>{label}</label>
-            <input onChange={handleChangeForm} value={form[id]} type={type}  id={id} placeholder={placeholder} readOnly={isReadonly} required={isRequired}  />
-        </div>
+        <InputContainer>
+            <LabelStyle htmlFor={id}>{label}</LabelStyle>
+            <InputStyle onChange={handleChangeForm} value={form[id]} type={type}  id={id} placeholder={placeholder} readOnly={isReadonly} required={isRequired}  />
+        </InputContainer>
     )
 }
