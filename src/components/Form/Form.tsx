@@ -1,17 +1,9 @@
 import React, { createContext, useCallback, useContext, useState } from 'react';
 import styled from 'styled-components';
+import { stateForm } from '../../types';
 import { Button } from '../Button/Button';
 
-export type stateForm = {
-    id: number;
-    name: string;
-    countEmployee?: number;
-    address?: string;
-    surname?: string;
-    position?: string;
-    companyId?: number; 
-    [k: string]: string | undefined | number;
-}
+
 
 type FormProps = {
     children: JSX.Element | JSX.Element[];
@@ -60,7 +52,6 @@ const FormContext = createContext({} as ContextProps)
 
 export const Form: React.FC<FormProps> = ({children, buttonTitle = 'Применить', initialState, apply}) => {
     const [form, setForm] = useState<stateForm>(initialState);
-    // console.log(form)
     const handleChangeForm = useCallback( (e: React.FormEvent<HTMLInputElement>) => {
         const {id, value} = e.currentTarget;
         setForm((prev) => ({
@@ -94,7 +85,6 @@ export const Form: React.FC<FormProps> = ({children, buttonTitle = 'Примен
 
 export const FormInput: React.FC<FormInputProps> = ({type, label, id, placeholder, isReadonly, isRequired}) => {
     const {form, handleChangeForm} = useContext(FormContext);
-    // console.log(form)
     return (
         <InputContainer>
             <LabelStyle htmlFor={id}>{label}</LabelStyle>

@@ -1,15 +1,7 @@
 import { createSlice, CaseReducer, PayloadAction } from "@reduxjs/toolkit";
 import { companiesData } from "../../mock/companies";
-import { ChoosenItems, Company } from "../../types";
+import { ChoosenItems, Company, CompanyState } from "../../types";
 import { COUNTELEM } from "../../utils/permanent";
-
-
-export type CompanyState = {
-    items: Company[],
-    selectedCompanies: ChoosenItems,
-    status: string,
-    page: 0
-}
 
 const setCompanies: CaseReducer<CompanyState, PayloadAction> = (state, action) => {
     const offset = COUNTELEM * state.page;
@@ -19,7 +11,6 @@ const setCompanies: CaseReducer<CompanyState, PayloadAction> = (state, action) =
 
 const deleteEmployees: CaseReducer<CompanyState, PayloadAction<{items: ChoosenItems, id: number}>> = (state, action) => {
     const countEmployees = Object.entries(action.payload.items).filter( ([_, value]) => value ).length;
-    console.log(action.payload)
     state.items = state.items.map(company => {
         if(company.id === action.payload.id) {
             const newCountEmployes = company.countEmployee - countEmployees;

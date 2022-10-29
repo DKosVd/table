@@ -19,7 +19,6 @@ const Tr = styled.tr`
 `
 
 const Row = <T extends object & {id: number, name: string}>( {value, handlerPick, clearActive = false}: RowProps<T> ) => {
-    console.log('render row')
     const handleSetActive = (e: React.SyntheticEvent) => {
         handlerPick(value.id)
     }

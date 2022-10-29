@@ -1,16 +1,10 @@
 import { createSlice, CaseReducer, PayloadAction } from "@reduxjs/toolkit";
 import { employeesData } from "../../mock/employees";
-import { ChoosenItems, Employee } from "../../types";
+import { ChoosenItems, Employee, EmployeesState } from "../../types";
 import { COUNTELEM } from "../../utils/permanent";
 
 
-export type EmployeesState = {
-    items: Employee[],
-    itemsById: Employee[],
-    selectedEmployees: ChoosenItems,
-    status: string,
-    page: number
-}
+
 
 const initialState:EmployeesState = {
     items: employeesData,
@@ -65,7 +59,6 @@ const addEmployee: CaseReducer<EmployeesState, PayloadAction<Employee>> = (state
 
 const editEmployee:CaseReducer<EmployeesState, PayloadAction<Employee>> = (state, action) => {
     state.items = state.items.map(item => {
-        console.log(action.payload)
         if(item.id === action.payload.id) {
             return {
                 ...action.payload
@@ -75,7 +68,6 @@ const editEmployee:CaseReducer<EmployeesState, PayloadAction<Employee>> = (state
     })
 
     state.itemsById = state.itemsById.map(item => {
-        console.log(action.payload)
         if(item.id === action.payload.id) {
             return {
                 ...action.payload
